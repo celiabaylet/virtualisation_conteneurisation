@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  pma:
+    image: adminer
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:
