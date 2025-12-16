@@ -235,4 +235,129 @@ services:
 
 ## 5. DB please
 ### 🌞 Créer un Dockerfile
+```
+dans tp1_part2/5/Dockerfile ajouter un Dockerfile identique à celui du tp1_part2/1
+```
+### 🌞 Créer un compose.yml
+```
+voir tp1_part2/5/compose.yml
+```
+### 🌞 Allumer la stack et prouver que ça fonctionne
+```
+docker compose up
+docker ps
 
+CONTAINER ID   IMAGE                    COMMAND                  CREATED              STATUS          PORTS                                         NAMES
+68934a122bcc   mysql:8.4                "docker-entrypoint.s…"   About a minute ago   Up 24 seconds   3306/tcp, 33060/tcp                           5-db-1
+6f07d2060d2c   phpmyadmin               "/docker-entrypoint.…"   13 minutes ago       Up 24 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp       5-pma-1
+f44c66e6e764   shitty_app_with_db:1.0   "docker-entrypoint.s…"   13 minutes ago       Up 24 seconds   0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp   5-app-1
+```
+```
+docker compose logs
+
+pma-1  | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.21.0.3. Set the 'ServerName' directive globally to suppress this message
+pma-1  | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.21.0.3. Set the 'ServerName' directive globally to suppress this message
+pma-1  | [Tue Dec 16 09:03:42.142752 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.65 (Debian) PHP/8.3.28 configured -- resuming normal operations
+pma-1  | [Tue Dec 16 09:03:42.142819 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+app-1  | 
+app-1  | > Shitty webapp for B3 Dev TP1@1.0.0 dev
+app-1  | > nodemon -L src/app.js
+app-1  |
+app-1  | [nodemon] 3.1.11
+app-1  | [nodemon] to restart at any time, enter `rs`
+app-1  | [nodemon] watching path(s): *.*
+app-1  | [nodemon] watching extensions: js,mjs,cjs,json
+app-1  | [nodemon] starting `node src/app.js`
+app-1  | Waiting for database... (1/30)
+app-1  | Waiting for database... (2/30)
+...
+app-1  | Waiting for database... (30/30)
+app-1  | Failed to start: Error: Database connection failed
+app-1  |     at waitForDB (/app/src/app.js:46:9)
+app-1  | [nodemon] clean exit - waiting for changes before restart
+app-1  |
+app-1  | > Shitty webapp for B3 Dev TP1@1.0.0 dev
+app-1  | > nodemon -L src/app.js
+app-1  |
+pma-1  | [Tue Dec 16 09:15:29.581484 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00170: caught SIGWINCH, shutting down gracefully
+db-1   | 2025-12-16 09:15:20+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.4.7-1.el9 started.
+db-1   | 2025-12-16 09:15:21+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+db-1   | 2025-12-16 09:15:21+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.4.7-1.el9 started.
+db-1   | 2025-12-16 09:15:21+00:00 [Note] [Entrypoint]: Initializing database files
+db-1   | 2025-12-16T09:15:21.559328Z 0 [System] [MY-015017] [Server] MySQL Server Initialization - start.
+db-1   | 2025-12-16T09:15:21.561349Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.4.7) initializing of server in progress as process 80
+db-1   | 2025-12-16T09:15:21.576365Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+db-1   | 2025-12-16T09:15:22.257073Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+db-1   | 2025-12-16T09:15:22.964756Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+db-1   | 2025-12-16T09:15:26.050686Z 0 [System] [MY-015018] [Server] MySQL Server Initialization - end.
+db-1   | 2025-12-16 09:15:26+00:00 [Note] [Entrypoint]: Database files initialized
+db-1   | 2025-12-16 09:15:26+00:00 [Note] [Entrypoint]: Starting temporary server
+db-1   | 2025-12-16T09:15:26.128548Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+db-1   | 2025-12-16T09:15:26.454584Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.4.7) starting as process 123
+db-1   | 2025-12-16T09:15:26.479040Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+db-1   | 2025-12-16T09:15:26.983655Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+db-1   | 2025-12-16T09:15:27.441066Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+db-1   | 2025-12-16T09:15:27.441122Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.     
+db-1   | 2025-12-16T09:15:27.445648Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+db-1   | 2025-12-16T09:15:27.469931Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock
+db-1   | 2025-12-16T09:15:27.470123Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.7'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  MySQL Community Server - GPL.
+db-1   | 2025-12-16 09:15:27+00:00 [Note] [Entrypoint]: Temporary server started.
+db-1   | '/var/lib/mysql/mysql.sock' -> '/var/run/mysqld/mysqld.sock'
+db-1   | Warning: Unable to load '/usr/share/zoneinfo/iso3166.tab' as time zone. Skipping it.
+db-1   | Warning: Unable to load '/usr/share/zoneinfo/leap-seconds.list' as time zone. Skipping it.
+db-1   | Warning: Unable to load '/usr/share/zoneinfo/leapseconds' as time zone. Skipping it.
+db-1   | 2025-12-16 09:16:26+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.4.7-1.el9 started.
+db-1   | 2025-12-16 09:16:27+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+db-1   | 2025-12-16 09:16:27+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.4.7-1.el9 started.
+db-1   | '/var/lib/mysql/mysql.sock' -> '/var/run/mysqld/mysqld.sock'
+db-1   | 2025-12-16T09:16:27.457589Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+db-1   | 2025-12-16T09:16:27.864230Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.4.7) starting as process 1
+db-1   | 2025-12-16T09:16:27.873972Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+db-1   | 2025-12-16T09:16:29.636159Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+db-1   | 2025-12-16T09:16:29.776391Z 0 [System] [MY-010229] [Server] Starting XA crash recovery...
+db-1   | 2025-12-16T09:16:29.800640Z 0 [System] [MY-010232] [Server] XA crash recovery finished.
+db-1   |
+db-1   | InnoDB: Progress in percents: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 272025-12-16T09:16:29.924214Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+db-1   | 2025-12-16T09:16:29.924272Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.     
+db-1   |  282025-12-16T09:16:29.932247Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+db-1   |  29 30 31 32 33 34 35 36 372025-12-16T09:16:29.975969Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
+db-1   | 2025-12-16T09:16:29.976208Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.7'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+pma-1  | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.21.0.3. Set the 'ServerName' directive globally to suppress this message
+pma-1  | AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 172.21.0.3. Set the 'ServerName' directive globally to suppress this message
+pma-1  | [Tue Dec 16 09:16:27.175426 2025] [mpm_prefork:notice] [pid 1:tid 1] AH00163: Apache/2.4.65 (Debian) PHP/8.3.28 configured -- resuming normal operations
+pma-1  | [Tue Dec 16 09:16:27.175525 2025] [core:notice] [pid 1:tid 1] AH00094: Command line: 'apache2 -D FOREGROUND'
+app-1  | [nodemon] 3.1.11
+app-1  | [nodemon] to restart at any time, enter `rs`
+app-1  | [nodemon] watching path(s): *.*
+app-1  | [nodemon] watching extensions: js,mjs,cjs,json
+app-1  | [nodemon] starting `node src/app.js`
+app-1  | Waiting for database... (1/30)
+app-1  | Waiting for database... (2/30)
+app-1  | Waiting for database... (3/30)
+...
+app-1  | Waiting for database... (27/30)
+app-1  | Waiting for database... (28/30)
+app-1  | Waiting for database... (29/30)
+app-1  | Waiting for database... (30/30)
+```
+
+```
+curl http://localhost:8080
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : <!doctype html>
+```
+```
+curl http://localhost:3000 
+
+StatusCode        : 200
+StatusDescription : OK
+Content           :
+                        <h1>Simple DB App</h1>
+```
+### 🌞 Mettre en place des données persistentes pour la db
+```
+volumes:
+      - db_data:/var/lib/mysql
+```
